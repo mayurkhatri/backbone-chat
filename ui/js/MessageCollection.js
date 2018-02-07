@@ -11,6 +11,7 @@ var MessageCollection = Backbone.Collection.extend({
         this.socket.on('message', this.receive);
     },
     welcome: function(data) {
+        console.log(data);
         data.oldMessages.forEach(this.receive);
         this.cnx.set({ color: data.yourColor });
     },
@@ -27,6 +28,19 @@ var MessageCollection = Backbone.Collection.extend({
         this.add(message);
     },
     send: function (newMessage) {
+        console.log(this.cnx.get('user'))
+        $.ajax({
+          url:'/insertRecord',
+          type:'POST',
+          dataType: 'json',
+          data: {user: this.cnx.get('user'),
+            color: this.cnx.get('color'),
+            message: newMessage
+          },
+          success: function (object, status){
+           //debugger
+          }
+        });
         this.socket.emit('message', {
             user: this.cnx.get('user'),
             color: this.cnx.get('color'),

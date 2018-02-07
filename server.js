@@ -1,10 +1,32 @@
+// const express = require('express'),
+//   app = express(),
+//   port = 8080, mainController = require('./app/controllers/main.controller');
+
+
+// app.get('/', mainController.showHome);
+// app.get('/insertRecord', mainController.insertRecord);
+
+// app.listen(port, () => {
+//   console.log('App listening');
+// })
+
 var express = require('express');
+var bodyParser = require('body-parser');
 var colors = require('colors/safe');
 var getColor = require('./randomColor');
+var mainController = require('./app/controllers/main.controller');
 
 var messages = [];
 
-var app = express().use(express.static(__dirname + '/ui'));
+var app = express();
+app.use(express.static(__dirname + '/ui'));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+app.get('/', mainController.getAllRecords);
+app.post('/insertRecord', mainController.insertRecord);
 var server = require('http').createServer(app).listen(3210);
 
 // Add Socket IO to your server
